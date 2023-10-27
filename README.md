@@ -4,7 +4,7 @@ A simple implementation of a static attention Graph Attention Network for molecu
 My goal here was to get a simple and functional GAT architecture, something easy to tune and experiment with. While current test set results are subpar (~0.68 ROC AUC on test set) it's a good starting point to modify the architecture/data for experimentation.
 
 ## Dataset
-BACE is shortform for a specific enzyme BACE-1, or Beta-Secretase 1. The BACE dataset is widely used to predict if novel molecules can inhibit BACE enzyme activity. BACE-1 is closely studied due to its role in Alzheimer's disease; it can produce the offending proteins called beta-amyloid peptides. The dataset consists of a set of molecules represented as graphs, where each node is an atom with a specific numer of atomic features.
+BACE is shortform for a specific enzyme BACE-1, or Beta-Secretase 1. The BACE dataset is widely used to predict if novel molecules can inhibit BACE enzyme activity. BACE-1 is closely studied due to its role in Alzheimer's disease; it can produce the offending proteins called beta-amyloid peptides. The dataset consists of a set of molecules represented as graphs, where each node is an atom with a specific number of atomic features. You can read more about it here: https://moleculenet.org/datasets-1
 
 ## How to run this script
 To train and evaluate on the BACE dataset, simply run main.py. I've included a configuration file which allows the user to change any hyperparameters quickly. After a model is done training, it's weights and associated configuration is automatically saved in the saved_models directory. 
