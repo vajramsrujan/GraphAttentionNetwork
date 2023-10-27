@@ -19,8 +19,8 @@ class GraphAttentionNetwork(nn.Module):
         # Define the first layer
         self.layer1 = GraphAttentionLayer(node_features, n_hidden, n_heads, dropout=dropout)
 
-        # # Layer 2
-        # self.layer2 = GraphAttentionLayer(n_hidden, n_hidden, n_heads, dropout=dropout)
+        # Layer 2
+        self.layer2 = GraphAttentionLayer(n_hidden, n_hidden, n_heads, dropout=dropout)
 
         # Layer 3
         self.output_layer = GraphAttentionLayer(n_hidden, n_classes, n_heads, dropout=dropout)
@@ -29,7 +29,7 @@ class GraphAttentionNetwork(nn.Module):
         self.activation_1 = nn.ELU()
 
         # Activation for the final layer
-        self.activation_2 = nn.Softmax()
+        self.activation_2 = nn.Sigmoid()
 
         # Define a dropout layer
         self.dropout = nn.Dropout(dropout)
@@ -40,9 +40,9 @@ class GraphAttentionNetwork(nn.Module):
         h = self.layer1(h, adj_mat)
         h = self.activation_1(h)
 
-        # # Layer 2
-        # h = self.layer2(h, adj_mat)
-        # h = self.activation_1(h)
+        # Layer 2
+        h = self.layer2(h, adj_mat)
+        h = self.activation_1(h)
 
         # Output
         h = self.output_layer(h, adj_mat)
@@ -50,7 +50,7 @@ class GraphAttentionNetwork(nn.Module):
         # Average nodes from n X n_classes to  1 X n_classes
         h = mean(h, dim=0, keepdim=True)
 
-        # softmax to scale all classes to probabilities between 0 and 1
+        # sigmoid to scale all classes to probabilities between 0 and 1
         h = self.activation_2(h)
 
         return h

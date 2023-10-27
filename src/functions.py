@@ -5,8 +5,9 @@ import numpy as np
 from tqdm import tqdm
 from torch import optim, nn
 from torch.utils.data import DataLoader
-from classes.Configuration import Configuration
+from sklearn.metrics import roc_auc_score
 from classes.GraphAttentionNetwork import GraphAttentionNetwork
+from classes.Configuration import Configuration
 
 
 def instantiate_model(config: Configuration):
@@ -106,13 +107,13 @@ def train_eval_model(train_dataloader: DataLoader, eval_dataloader: DataLoader,
     learning_rate = config.get('experiment/training/learning_rate', 0.001)
 
     # Loss and optimizer
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.BCELoss()
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     # Train Network
     losses = np.zeros((1, len(train_dataloader))).flatten()
     avg_epoch_losses = np.zeros((1, num_epochs)).flatten()
-    avg_accuracy = np.zeros((1, num_epochs)).flatten()
+    roc_auc_over_epochs = np.zeros((1, num_epochs)).flatten()
 
     for i, epoch in enumerate(range(num_epochs)):
         for batch_index, (data, adjacency, targets) in enumerate(tqdm(train_dataloader)):
@@ -127,7 +128,7 @@ def train_eval_model(train_dataloader: DataLoader, eval_dataloader: DataLoader,
             targets = targets.to(device=device)
 
             # Forward pass
-            scores = model(data, adjacency)
+            scores = model(data, adjacency).squeeze()
 
             # Compute loss
             loss = criterion(scores, targets)
@@ -142,17 +143,17 @@ def train_eval_model(train_dataloader: DataLoader, eval_dataloader: DataLoader,
 
         # Save average epoch loss
         avg_epoch_losses[epoch] = np.mean(losses)
-        avg_accuracy[epoch] = evaluate_model(eval_dataloader, model)
+        roc_auc_over_epochs[epoch] = evaluate_model(eval_dataloader, model)
         print("\n")
         print("Epoch: " + str(epoch))
-        print(avg_accuracy[epoch])
+        print(roc_auc_over_epochs[epoch])
 
         # Upon training completion, save model as .tar file
         if epoch == num_epochs - 1 and save:
             state = {"model_state": model.state_dict(), "optim_state": optimizer.state_dict()}
             save_model_at_checkpoint(state, config)
 
-    return avg_epoch_losses, avg_accuracy
+    return avg_epoch_losses, roc_auc_over_epochs
 
 
 def evaluate_model(dataloader: DataLoader, model: GraphAttentionNetwork):
@@ -166,12 +167,12 @@ def evaluate_model(dataloader: DataLoader, model: GraphAttentionNetwork):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Set model to evaluation mode. Prevents things like dropout from occurring
-    # which are only meant to b e used during the training phase
+    # which are only meant to be used during the training phase
     model.eval()
 
     # Instantiate a list of model predictions and truth labels to populate
     model_predictions = [0] * len(dataloader)
-    actual_target = [0] * len(dataloader)
+    actual_labels = [0] * len(dataloader)
 
     # torch.no_grad ensures we are not computing gradients
     with torch.no_grad():
@@ -183,17 +184,11 @@ def evaluate_model(dataloader: DataLoader, model: GraphAttentionNetwork):
 
             # Compute predictions
             score = model(data, adjacency)
-            model_predictions[batch_index] = int(torch.argmax(score))
+            model_predictions[batch_index] = float(score)
             # Grab the truth label
-            actual_target[batch_index] = int(torch.argmax(target))
+            actual_labels[batch_index] = int(target)
 
     model.train()
-    num_correct = 0
-    # Tally up how many labels the model got correct and divide by total number of labels
-    for i in range(len(model_predictions)):
-        if model_predictions[i] == actual_target[i]:
-            num_correct += 1
+    roc_auc = roc_auc_score(actual_labels, model_predictions)
 
-    overall_accuracy = (num_correct / len(model_predictions)) * 100
-
-    return overall_accuracy
+    return roc_auc
