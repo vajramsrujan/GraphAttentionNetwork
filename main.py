@@ -10,7 +10,6 @@ from classes.Configuration import Configuration
 # Load Cora
 dataset = CoraDataset()
 
-# torch.manual_seed(42)
 # Split into train and test
 train_set, test_set = torch.utils.data.random_split(dataset, [2166, 542])
 
