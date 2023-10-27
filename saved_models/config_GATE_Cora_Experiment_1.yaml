@@ -1,0 +1,20 @@
+#data, num_epochs: int, node_features: int, n_hidden: int, n_classes: int, n_heads: int,
+#                dropout: float, learning_rate: float, load_model=False
+#
+#
+
+experiment:
+  meta:
+    name: "GATE_Cora_Experiment_1"
+  model:
+    family: "GAT"
+  training:
+    num_epochs: 10
+    node_features: 1433
+    n_classes: 7
+    n_hidden: 64
+    n_heads: 2
+    dropout: 0
+    learning_rate: 0.001
+  save:
+    save_path: "saved_models"
