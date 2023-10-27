@@ -6,7 +6,7 @@ from labml.utils import download
 from torch.utils.data import Dataset
 
 
-# As taken from:
+# Credit:
 # https://github.com/labmlai/annotated_deep_learning_paper_implementations/blob/master/labml_nn/graphs/gat/experiment.py
 class CoraDataset(Dataset):
     """
@@ -90,6 +90,8 @@ class CoraDataset(Dataset):
                 self.adj_mat[e1][e2] = True
                 self.adj_mat[e2][e1] = True
 
+    # Srujan:
+    # I modified the getitem method call so that the data and labels can be transformed as the dataloader is called.
     def __getitem__(self, index):
 
         graph = []

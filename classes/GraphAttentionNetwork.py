@@ -8,10 +8,10 @@ class GraphAttentionNetwork(nn.Module):
     def __init__(self, node_features: int, n_hidden: int, n_classes: int, n_heads: int, dropout: float):
 
         """
-        :param node_features:   Number of features per node
-        :param n_hidden:        Number of features in first layer
-        :param n_classes:       Number of output classes
-        :param n_heads:         Number of attention heads
+        node_features:   Number of features per node
+        n_hidden:        Number of features in first layer
+        n_classes:       Number of output classes
+        n_heads:         Number of attention heads
         """
 
         super().__init__()

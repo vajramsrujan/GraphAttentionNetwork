@@ -1,11 +1,11 @@
 import yaml
 
 
-# ============================================================================= #
-
+# Credit
 # https://jonnyjxn.medium.com/how-to-config-your-machine-learning-experiments-without-the-headaches-bb379de1b957
 class Configuration(object):
-    """Implements lash-based retrieval of
+    """
+    Implements lash-based retrieval of
     nested elements in configuration dictionary
     """
 

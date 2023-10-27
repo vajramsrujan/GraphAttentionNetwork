@@ -3,6 +3,7 @@ from torch import nn
 
 
 # ============================================================================= #
+
 # Significant credit to
 # https://github.com/labmlai/annotated_deep_learning_paper_implementations/blob/master/labml_nn/graphs/gat/__init__.py
 # Much of the layer was adopted and modified from the above repository
@@ -12,12 +13,12 @@ class GraphAttentionLayer(nn.Module):
                  dropout: float = 0.0,
                  leaky_relu_negative_slope: float = 0.2):
         """
-        * `in_features`, is the number of input features per node
-        * `out_features`, is the number of output features per node
-        * `n_heads`, is the number of attention heads
-        * `is_concat` whether the multi-head results should be concatenated or averaged
-        * `dropout` is the dropout probability
-        * `leaky_relu_negative_slope` is the negative slope for leaky relu activation
+        in_features:    Number of input features per node
+        out_features:   Number of output features per node
+        n_heads:        Number of attention heads
+        is_concat:      Whether the multi-head results should be concatenated or averaged
+        dropout:        The dropout probability
+        Leaky_relu_negative_slope: Negative slope for leaky relu activation
         """
 
         super().__init__()
@@ -44,6 +45,11 @@ class GraphAttentionLayer(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, h: torch.Tensor, adj_mat: torch.Tensor):
+        """
+        h: Input collection of nodes (n x m) where n is # nodes and m is # features
+        adj_mat: Matrix describing what nodes are connected to each other
+        returns forward pass of nodes through linear layer & attention mechanism
+        """
         n_nodes = h.shape[0]
 
         # First dropout to input node features

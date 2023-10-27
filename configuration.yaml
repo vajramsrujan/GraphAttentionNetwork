@@ -1,8 +1,3 @@
-#data, num_epochs: int, node_features: int, n_hidden: int, n_classes: int, n_heads: int,
-#                dropout: float, learning_rate: float, load_model=False
-#
-#
-
 experiment:
   meta:
     name: "GATE_Cora_Experiment_1"

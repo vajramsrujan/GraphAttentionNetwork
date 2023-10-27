@@ -11,8 +11,8 @@ from classes.GraphAttentionNetwork import GraphAttentionNetwork
 
 def instantiate_model(config: Configuration):
     """
-    :param config: Configuration object as loaded using Configuration()
-    :return: GAT model object
+    config: Configuration object as loaded using Configuration()
+    return: GAT model object
     """
     # Use GPU if available else CPU
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -34,9 +34,9 @@ def instantiate_model(config: Configuration):
 
 def load_model_weights(tar_file_path: str, config: Configuration):
     """
-    :param tar_file_path: String path to tar file for model weights
-    :param config: Configuration object
-    :return: GAT model object
+    tar_file_path:  String path to tar file for model weights
+    config:         Configuration object
+    return:         GAT model object
     """
 
     model = instantiate_model(config)
@@ -55,9 +55,9 @@ def load_model_weights(tar_file_path: str, config: Configuration):
 
 def save_model_at_checkpoint(state: dict, config: Configuration):
     """
-    :param state: Dictionary of model state
-    :param config: Configuration object
-    :return: None
+    state:  Dictionary of model state
+    config: Configuration object
+    return: None
     """
 
     # Where to save model
@@ -83,12 +83,12 @@ def save_model_at_checkpoint(state: dict, config: Configuration):
 def train_eval_model(train_dataloader: DataLoader, eval_dataloader: DataLoader,
                      config: Configuration, save: bool, model_weights=None):
     """
-    :param model_weights: Can pass model weights for a specific run as a .tar file
-    :param save: bool flag to save the model weights and config file
-    :param eval_dataloader: The dataloader to evaluate
-    :param train_dataloader: The dataloader to train on
-    :param config: Configuration object
-    :return: Tuple of average losses and average accuracies over each epoch
+    model_weights:      Can pass model weights for a specific run as a .tar file
+    save:               bool flag to save the model weights and config file
+    eval_dataloader:    The dataloader to evaluate
+    train_dataloader:   The dataloader to train on
+    config:             Configuration object
+    :return:            Tuple of average losses and average accuracies over each epoch
     """
 
     # Empty cuda cache memory
@@ -157,15 +157,15 @@ def train_eval_model(train_dataloader: DataLoader, eval_dataloader: DataLoader,
 
 def evaluate_model(dataloader: DataLoader, model: GraphAttentionNetwork):
     """
-    :param dataloader: The dataloader object to evaluate
-    :param model: The model object
-    :return: Accuracy of the evaluation dataset
+    dataloader:     The dataloader object to evaluate
+    model:          The model object
+    return:         Accuracy of the evaluation dataset
     """
 
     # Set device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # Set model to evaluation mode. Prevents things like dropout from occuring
+    # Set model to evaluation mode. Prevents things like dropout from occurring
     # which are only meant to b e used during the training phase
     model.eval()
 
