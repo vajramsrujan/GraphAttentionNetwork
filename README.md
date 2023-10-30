@@ -1,5 +1,5 @@
 # Overview
-A simple implementation of a static attention Graph Attention Network for molecule classification on the BACE dataset from MoleculeNet. This repository implements the original GAT paper as found here: https://arxiv.org/abs/1710.10903. Much of this code was adapted from the labmlai repositiry: https://github.com/labmlai/annotated_deep_learning_paper_implementations/tree/master/labml_nn/graphs.
+A simple implementation of a static attention Graph Attention Network for molecule classification on the BACE dataset from MoleculeNet. This repository implements the original GAT paper as found here: https://arxiv.org/abs/1710.10903. Much of this code was adapted from the labmlai repository: https://github.com/labmlai/annotated_deep_learning_paper_implementations/tree/master/labml_nn/graphs.
 
 My goal here was to get a simple and functional GAT architecture, something easy to tune and experiment with. While current test set results are subpar (~0.68 ROC AUC on test set) it's a good starting point to modify the architecture/data for experimentation.
 
